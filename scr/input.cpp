@@ -1,20 +1,12 @@
 #include <bits/stdc++.h>
 #include "SDL2/SDL.h"
 #include"structs.h"
-
+extern App app;
 void doKeyDown(SDL_KeyboardEvent *event)
 {
     if (event->repeat == 0)
     {
-        if (event->keysym.scancode == SDL_SCANCODE_UP)
-        {
-            app.up = 1;
-        }
-
-        if (event->keysym.scancode == SDL_SCANCODE_DOWN)
-        {
-            app.down = 1;
-        }
+        
 
         if (event->keysym.scancode == SDL_SCANCODE_LEFT)
         {
@@ -32,15 +24,7 @@ void doKeyUp(SDL_KeyboardEvent *event)
 {
     if (event->repeat == 0)
     {
-        if (event->keysym.scancode == SDL_SCANCODE_UP)
-        {
-            app.up = 0;
-        }
-
-        if (event->keysym.scancode == SDL_SCANCODE_DOWN)
-        {
-            app.down = 0;
-        }
+        
 
         if (event->keysym.scancode == SDL_SCANCODE_LEFT)
         {

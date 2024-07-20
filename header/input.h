@@ -3,6 +3,7 @@
 
 #include <bits/stdc++.h>
 #include "SDL2/SDL.h"
+#include"structs.h"
 
 void doKeyDown(SDL_KeyboardEvent *event);
 
