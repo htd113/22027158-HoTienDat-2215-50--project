@@ -1,50 +1,39 @@
-#include <bits/stdc++.h>
-#include "SDL2/SDL.h"
-#include <SDL2/SDL_image.h>
-#include "structs.h"
-#include "defs.h"
-#include "draw.h"
-#include "init.h"
-#include "input.h"
-
+#include "stage.h"
+//extern dinh nghia app nhieu lan, tranh xung dot
 
 App app;
-Entity player;
+//Entity *player;
 
-
-int main(int argc, char** argv)
+int main(int argc, char *argv[])
 {
+    long then;
+    float remainder;
+
     memset(&app, 0, sizeof(App));
-    memset(&player, 0, sizeof(Entity));
-    
+
     initSDL();
 
-    player.x = 100;
-    player.y = 100;
-    player.texture = loadTexture("data/images/monster.jpg");
- 
-    while (true)
+    //atexit(cleanup);
+
+    initStage();
+
+    then = SDL_GetTicks();
+
+    remainder = 0;
+
+    while (1)
     {
         prepareScene();
 
         doInput();
 
-        if (app.left && player.x>=0)
-        {
-            player.x -= PLAYER_SPEED;
-        }
+        app.delegate.logic();
 
-        if (app.right && player.x<=1180)
-        {
-            player.x += PLAYER_SPEED;
-        }
-
-        blit(player.texture, player.x, player.y);
+        app.delegate.draw();
 
         presentScene();
 
-        SDL_Delay(16);
-
+        capFrameRate(&then, &remainder);
     }
 
     return 0;

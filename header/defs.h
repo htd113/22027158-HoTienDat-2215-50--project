@@ -1,3 +1,20 @@
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 720
-#define PLAYER_SPEED 20
+#define SCREEN_WIDTH 496
+#define SCREEN_HEIGHT 616
+
+#define PLAYER_SPEED  4
+#define PLAYER_BULLET_SPEED 16
+
+#define BOARD_SPEED -1
+#define BOARD_WIDTH 100
+#define BOARD_HEIGHT 20
+
+#define PLAYER_WIDTH 30
+#define PLAYER_HEIGHT 30
+
+#define GRAVITY 0.5 
+#define MAX_FALL_SPEED 5
+#define MAX_KEYBOARD_KEYS 350
+
+#define SIDE_PLAYER 0
+#define SIDE_ALIEN  1
+

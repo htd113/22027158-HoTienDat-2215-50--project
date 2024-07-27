@@ -1,40 +1,19 @@
-#include <bits/stdc++.h>
-#include "SDL2/SDL.h"
-#include"structs.h"
+#include "input.h"
+
 extern App app;
-void doKeyDown(SDL_KeyboardEvent *event)
+void doKeyUp(SDL_KeyboardEvent *event)
 {
-    if (event->repeat == 0)
+    if (event->repeat == 0 && event->keysym.scancode < MAX_KEYBOARD_KEYS)
     {
-        
-
-        if (event->keysym.scancode == SDL_SCANCODE_LEFT)
-        {
-            app.left = 1;
-        }
-
-        if (event->keysym.scancode == SDL_SCANCODE_RIGHT)
-        {
-            app.right = 1;
-        }
+        app.keyboard[event->keysym.scancode] = 0;
     }
 }
 
-void doKeyUp(SDL_KeyboardEvent *event)
+void doKeyDown(SDL_KeyboardEvent *event)
 {
-    if (event->repeat == 0)
+    if (event->repeat == 0 && event->keysym.scancode < MAX_KEYBOARD_KEYS)
     {
-        
-
-        if (event->keysym.scancode == SDL_SCANCODE_LEFT)
-        {
-            app.left = 0;
-        }
-
-        if (event->keysym.scancode == SDL_SCANCODE_RIGHT)
-        {
-            app.right = 0;
-        }
+        app.keyboard[event->keysym.scancode] = 1;
     }
 }
 

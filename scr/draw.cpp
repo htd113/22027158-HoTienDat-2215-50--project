@@ -1,7 +1,4 @@
-#include <bits/stdc++.h>
-#include "SDL2/SDL.h"
-#include <SDL2/SDL_image.h>
-#include "structs.h"
+#include "draw.h"
 
 extern App app;
 
@@ -9,7 +6,7 @@ extern App app;
 
 void prepareScene(void)
 {
-    SDL_SetRenderDrawColor(app.renderer, 0, 0, 0, 0);// renderer đen luon
+    SDL_SetRenderDrawColor(app.renderer, 255, 93, 0, 0);// renderer đen luon
    
     SDL_RenderClear(app.renderer);
     
@@ -21,13 +18,24 @@ void presentScene(void)
     SDL_RenderPresent(app.renderer);
 }
 
-void blit(SDL_Texture* texture, int x, int y)
+void blit_player(SDL_Texture* texture, int x, int y)
 {
     SDL_Rect dest;
     dest.x = x;
     dest.y = y;
-    dest.w=100;
-    dest.h=100;
+    dest.w = PLAYER_WIDTH;
+    dest.h = PLAYER_HEIGHT;
+
+    SDL_RenderCopy(app.renderer, texture, NULL, &dest);
+}
+
+void blit_board(SDL_Texture* texture, int x, int y)
+{
+    SDL_Rect dest;
+    dest.x = x;
+    dest.y = y;
+    dest.w = BOARD_WIDTH;
+    dest.h = BOARD_HEIGHT;
 
     SDL_RenderCopy(app.renderer, texture, NULL, &dest);
 }
