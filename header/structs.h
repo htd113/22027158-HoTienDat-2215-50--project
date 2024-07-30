@@ -23,15 +23,18 @@ struct Entity {
     float dx;
     float dy;
     float gravitySpeed; // Tốc độ rơi
-    int health;
+    int health[MAX_HEARTS];
     int reload;
+    int side;
+    int lifetime;
     SDL_Texture *texture;
     Entity *next;
 };
 
 typedef struct {
     Entity enemyHead, *enemyTail;
-    Entity boardHead, *boardTail;
+    //Entity boardHead, *boardTail;
+    Entity heartHead, *heartTail;
 } Stage;
 
 #endif 

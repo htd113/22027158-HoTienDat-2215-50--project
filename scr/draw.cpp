@@ -39,3 +39,14 @@ void blit_board(SDL_Texture* texture, int x, int y)
 
     SDL_RenderCopy(app.renderer, texture, NULL, &dest);
 }
+
+void blit_heart(SDL_Texture* texture, int x, int y)
+{
+    SDL_Rect dest;
+    dest.x = x;
+    dest.y = y;
+    dest.w = HEART_WIDTH;
+    dest.h = HEART_HEIGHT;
+
+    SDL_RenderCopy(app.renderer, texture, NULL, &dest);
+}

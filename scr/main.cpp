@@ -17,6 +17,8 @@ int main(int argc, char *argv[])
 
     initStage();
 
+    initSounds();
+
     then = SDL_GetTicks();
 
     remainder = 0;

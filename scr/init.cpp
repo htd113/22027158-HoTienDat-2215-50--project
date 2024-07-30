@@ -38,6 +38,14 @@ void initSDL(void)
         printf("Failed to create renderer: %s\n", SDL_GetError());
         exit(1);
     }
+
+    /*if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+    {
+        printf("Couldn't initialize SDL Mixer\n");
+        exit(1);
+    }
+
+    Mix_AllocateChannels(MAX_SND_CHANNELS);*/
 }
 
 SDL_Texture* loadTexture(std::string filename) {
