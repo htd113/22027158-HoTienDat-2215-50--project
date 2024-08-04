@@ -37,7 +37,6 @@ void doInput(void)
                 doKeyUp(&event.key);
                 break;
 
-
             default:
                 break;
         }

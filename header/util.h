@@ -5,4 +5,6 @@
 
 void handleCollisions(Entity* player, Entity* enemy);
 
+int IsPlayer(Entity *player);
+
 #endif

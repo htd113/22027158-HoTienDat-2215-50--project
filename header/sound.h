@@ -1,19 +1,32 @@
 #ifndef SOUND_H
 #define SOUND_H
 
-#include "init.h"
+#include <bits/stdc++.h>
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
+#include "SDL2/SDL_mixer.h"
+#include "SDL2/SDL_ttf.h"
+#include "defs.h"
 
-/*void loadMusic(char *filename);
+Mix_Music* LoadMusic(std::string filename);
 
-void initSounds(void) ;
+/*Chuyển nhạc nền*/
+static void musicFinishedCallback(void);
 
-//static void loadSounds(void);
+/*Tìm nhạc theo đường dẫn*/
+Mix_Chunk* loadMusic(std::string filename) ;
 
-void playMusic(int loop);
+/*Tải nhạc nền*/
+void load_music_background(void);
 
-void playSound(int id, int channel);*/
+/*Tải hiệu ứng âm thanh*/
+void loadSounds(void);
 
-Mix_Music* loadMusic(std::string filename);
 void initSounds(void);
 
+/*Phát nhạc nền*/
+void playMusic(int loop);
+
+/*Phát âm thanh theo kênh*/
+void playSound(int id, int channel);
 #endif

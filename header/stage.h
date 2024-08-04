@@ -5,6 +5,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "SDL2/SDL_mixer.h"
+#include "SDL2/SDL_ttf.h"
 #include "structs.h"
 #include "defs.h"
 #include "draw.h"
@@ -12,8 +13,13 @@
 #include "input.h"
 #include "util.h"
 #include "sound.h"
+#include "text.h"
+#include "highscores.h"
+#include "title.h"
+#include "widgets.h"
+#include "demo.h"
 
 void initStage(void);
-void capFrameRate(long *then, float *remainder);
+void capFrameRate(long *then);
 
 #endif

@@ -1,18 +1,37 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
-#include"defs.h"
-typedef struct {
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
+#include "defs.h"
+
+struct Widget {
+    char name[MAX_NAME_LENGTH];
+    int x;
+    int y;
+    char label[MAX_NAME_LENGTH];
+    Widget *prev;
+    Widget *next;
+};
+
+/*typedef struct {
     void (*logic)(void);
     void (*draw)(void);
-} Delegate;
+} Delegate;*/
 
 typedef struct {
+    struct {
+        void (*logic)(void);
+        void (*draw)(void);
+    } delegate;
     SDL_Renderer *renderer;
     SDL_Window *window;
-    Delegate delegate;
-    //int left,right,down,up;
     int keyboard[MAX_KEYBOARD_KEYS];
+    double deltaTime;
+    Widget *activeWidget;
+    struct {
+        int fps;
+    } dev;
 } App;
 
 struct Entity {
@@ -23,18 +42,32 @@ struct Entity {
     float dx;
     float dy;
     float gravitySpeed; // Tốc độ rơi
-    int health[MAX_HEARTS];
+    //int health[MAX_HEARTS];
     int reload;
     int side;
     int lifetime;
     SDL_Texture *texture;
     Entity *next;
+    
 };
 
 typedef struct {
     Entity enemyHead, *enemyTail;
     //Entity boardHead, *boardTail;
     Entity heartHead, *heartTail;
+    //Entity widgetHead, *widgetTail;
+    int score;
 } Stage;
+
+typedef struct {
+    int recent;
+    int score;
+} Highscore;
+
+typedef struct {
+    Highscore highscore[NUM_HIGHSCORES];
+} Highscores;
+
+
 
 #endif 

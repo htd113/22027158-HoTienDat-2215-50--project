@@ -2,10 +2,10 @@
 extern App app;
 
 Stage stage;
-
-Entity *player, *heart;
-SDL_Texture *enemyTexture, *heartTexture, *background;
-int enemySpawnTimer = 0, heartSpawnTimer = 0;
+int highscore;
+Entity *player;
+SDL_Texture *enemyTexture, *background;
+int enemySpawnTimer = 0, stageResetTimer;
 
 /*Khởi tạo người chơi, bao gồm việc cấp phát bộ nhớ,
  thiết lập vị trí ban đầu, và tải texture cho người chơi.*/
@@ -24,7 +24,7 @@ static void initPlayer()
     player->x = rand() % (SCREEN_WIDTH-100);
     player->y = 100;
     
-    player->texture = loadTexture("data\\images\\monster.jpg");
+    player->texture = loadTexture("data\\images\\jhin01.jpg");
     if (!player->texture) 
     {
         fprintf(stderr, "Failed to load player texture: %s\n", SDL_GetError());
@@ -35,32 +35,6 @@ static void initPlayer()
     //player->side = SIDE_PLAYER;
 }
 
-/*static void initHeart()
-{
-    heart = (Entity *)malloc(sizeof(Entity));
-    if (!heart) 
-    {
-        fprintf(stderr, "Failed to allocate memory for player\n");
-        exit(1);
-    }
-    memset(heart, 0, sizeof(Entity));
-    stage.enemyTail->next = heart;
-    stage.enemyTail = heart;
-
-    heart->x = rand() % (SCREEN_WIDTH-100);
-    heart->y = rand() % SCREEN_HEIGHT;
-    
-    heart->texture = loadTexture("data\\images\\tim.jpg");
-    if (!heart->texture) 
-    {
-        fprintf(stderr, "Failed to load player texture: %s\n", SDL_GetError());
-        exit(1);
-    }
-    SDL_QueryTexture(heart->texture, NULL, NULL, &heart->w, &heart->h);
-
-    //player->side = SIDE_PLAYER;
-}
-*/
 
 /*Khoảng cách cố định giữa các kẻ thù*/
 static const int ENEMY_SPAWN_GAP = 100;
@@ -93,7 +67,7 @@ static void spawnEnemies(void)
 
         // Đặt thời gian sinh kẻ thù mới dựa trên khoảng cách cố định và tốc độ di chuyển
         enemySpawnTimer = ENEMY_SPAWN_GAP / abs(enemy->dy); 
-
+        enemy->reload = FPS * (1 + (rand() % 3));
         //enemy->side = SIDE_BOARD;
     }
 }
@@ -102,6 +76,8 @@ static void spawnEnemies(void)
 cập nhật vị trí của người chơi dựa trên tốc độ di chuyển.*/
 static void doPlayer(void)
 {
+    if(player != NULL)
+    {
     player->dx = player->dy = 0;
 
     if (player->reload > 0) 
@@ -117,19 +93,22 @@ static void doPlayer(void)
     if (app.keyboard[SDL_SCANCODE_DOWN] && player->y <= SCREEN_HEIGHT-PLAYER_HEIGHT) 
     {
         player->dy = PLAYER_SPEED;
-        //playSound(SND_PLAYER_MOVE, CH_PLAYER);
+        stage.score++;
+        playSound(SND_PLAYER_MOVE, CH_PLAYER);
     }
 
     if (app.keyboard[SDL_SCANCODE_LEFT] && player->x >= 0) 
     {
         player->dx = -PLAYER_SPEED;
-        //playSound(SND_PLAYER_MOVE, CH_PLAYER);
+        stage.score++;
+        playSound(SND_PLAYER_MOVE, CH_PLAYER);
     }
 
     if (app.keyboard[SDL_SCANCODE_RIGHT] && player->x <= SCREEN_WIDTH-PLAYER_WIDTH) 
     {
         player->dx = PLAYER_SPEED;
-        //playSound(SND_PLAYER_MOVE, CH_PLAYER);
+        stage.score++;
+        playSound(SND_PLAYER_MOVE, CH_PLAYER);
     }
 
     /*Đặt trọng lực*/
@@ -144,14 +123,64 @@ static void doPlayer(void)
     for (Entity* enemy = stage.enemyHead.next; enemy != NULL; enemy = enemy->next) 
     {
         handleCollisions(player, enemy);
+        //stage.score++;
+        //if(stage.score > highscore) highscore=stage.score;
+    }
+    //highscore=std::max(highscore, stage.score);
+    /* Kiểm tra xem người chơi có ra khỏi màn hình không */
+    if (IsPlayer(player)) 
+    {
+    highscore = std::max(highscore, stage.score);
+    playSound(SND_PLAYER_DIE, CH_PLAYER);
+
+    // Ghi điểm cao vào tệp
+    std::string base_path = std::string(SDL_GetBasePath()); 
+    //std::ofstream file((base_path + "data/highscore.txt").c_str());
+    
+    // Đọc tất cả điểm số từ tệp
+    std::vector<int> scores;
+    std::ifstream scoreFile((base_path + "data/highscore.txt").c_str());
+    int score;
+    while (scoreFile >> score)
+    {
+        scores.push_back(score);
+    }
+    scoreFile.close();
+
+    if(std::size(scores)==8)
+    {
+        if(stage.score > scores.back())
+        {
+            scores.back() = stage.score;
+        }
+    }
+    else if(std::size(scores) < 8)
+    {
+        scores.push_back(stage.score);
     }
 
-    /* Kiểm tra xem người chơi có ra khỏi màn hình không */
-    if (  player->y < 0 || player->y > SCREEN_HEIGHT) 
+    // Sắp xếp danh sách điểm số
+    std::sort(scores.begin(), scores.end(), std::greater<int>());
+
+    // Ghi lại danh sách điểm số vào tệp
+    std::ofstream updatedFile((base_path + "data/highscore.txt").c_str());
+    if (updatedFile.is_open())
     {
-        // Xử lý tùy ý (ví dụ: kết thúc trò chơi)
-        //playSound(SND_PLAYER_DIE, CH_PLAYER);
-        exit(0); // Thoát chương trình
+    for (int updatedScore : scores)
+    {
+        updatedFile << updatedScore << "\n";
+    }
+    updatedFile.close();
+    }
+
+    else
+    {
+        exit(0);
+    }
+
+    SDL_Delay(500);
+    initHighscores();
+    }
     }
 
 }
@@ -185,20 +214,31 @@ static void doEnemies(void)
     }
 }
 
-static void doHearts(void)
+static void resetStage(void)
 {
-     // Cập nhật thời gian tồn tại của trái tim và loại bỏ trái tim khi hết thời gian
-    Entity *prev = &stage.heartHead;
-    for (Entity *h = stage.heartHead.next; h != NULL; h = h->next) {
-        if (--h->lifetime <= 0) {
-            prev->next = h->next;
-            free(h);
-            h = prev; // Quay lại kiểm tra thực thể tiếp theo
-        }
-        prev = h;
-    }
-}
+    Entity *e;
 
+    while (stage.enemyHead.next)
+    {
+        e = stage.enemyHead.next;
+        stage.enemyHead.next = e->next;
+        free(e);
+    }
+
+
+    memset(&stage, 0, sizeof(Stage));
+    stage.enemyTail = &stage.enemyHead;
+    //stage.bulletTail = &stage.bulletHead;
+
+    initPlayer();
+
+    enemySpawnTimer = 0;
+
+    stageResetTimer = FPS * 2;
+
+    stage.score = 0;
+
+}
 
 /* Khai báo biến backgroundX và gán giá trị mặc định là 0*/
 static int backgroundX = 0;
@@ -210,16 +250,29 @@ static void doBackground(void)
         backgroundX = 0;
     }
 }
-/*Gọi các hàm xử lý logic cho người chơi, 
- các thực thể chiến đấu, và sinh ra kẻ thù.*/
+
+/*Gọi các hàm xử lý logic*/
 static void logic(void)
 {
-    doBackground();
+    //doBackground();
     doPlayer();
+
     doEnemies();
+    
     spawnEnemies();
-    //doHearts();
-    //spawnHearts();
+
+    if (player == NULL && --stageResetTimer <= 0)
+    {
+        resetStage();
+    }
+
+
+    if (player == NULL && --stageResetTimer <= 0)
+    {
+        addHighscore(stage.score);
+
+        initHighscores();
+    }
 }
 
 /*Vẽ người chơi lên màn hình.*/
@@ -228,6 +281,7 @@ static void drawPlayer(void)
     blit_player(player->texture, player->x, player->y);
 }
 
+/*Vẽ kẻ thù lên màn hình*/
 static void drawEnemies(void)
 {
     Entity *e;
@@ -239,12 +293,6 @@ static void drawEnemies(void)
             blit_board(e->texture, e->x, e->y);
         }
     }
-}
-
-/*Vẽ tất cả các kẻ thù lên màn hình.*/
-static void drawHearts(void)
-{  
-   //blit_board(heart->texture, heart->x, heart->y);
 }
 
 /*Vẽ ảnh nền*/ 
@@ -265,40 +313,59 @@ static void drawBackground(void)
         SDL_RenderCopy(app.renderer, background, NULL, &dest);
     }*/
 }
+/*Vẽ chữ lên màn hình*/
+static void drawHud(void)
+{
+
+    drawText_score(0, 50, "SCORE: ", stage.score);
+    std::string base_path = std::string(SDL_GetBasePath()); 
+    std::ifstream scoreFile((base_path + "data/highscore.txt").c_str());
+    if(scoreFile.is_open())
+    {
+        scoreFile >> highscore;
+        scoreFile.close();
+    }
+    drawText_highscore(0, 0, "HIGH SCORE:  ",highscore);
+  
+    //if(stage.score>highscore)
+}
+
 
 /*Gọi các hàm vẽ để vẽ người chơi và kẻ thù lên màn hình, sau đó cập nhật renderer.*/
 static void draw(void)
 {
+
     drawBackground();
+
     drawPlayer();
+
     drawEnemies();
-    drawHearts();
+
+    drawHud();
+
     SDL_RenderPresent(app.renderer); // cập nhật renderer
 }
 
 /*Giới hạn tốc độ khung hình để đảm bảo trò chơi chạy mượt mà và không quá nhanh.*/
-void capFrameRate(long *then, float *remainder)
+void capFrameRate(long *then)
 {
-    long wait, frameTime;
+    const int targetFrameTime = 16; // 16 ms for 60 FPS (adjust as needed)
 
-    wait = 16 + *remainder;
-    *remainder -= (int)*remainder;
-
-    frameTime = SDL_GetTicks() - *then;
-    wait -= frameTime;
-
-    if (wait < 1) 
+    long frameTime = SDL_GetTicks() - *then;
+    if (frameTime < targetFrameTime)
     {
-        wait = 1;
+        SDL_Delay(targetFrameTime - frameTime);
     }
 
-    SDL_Delay(wait);
-    *remainder += 0.667;
     *then = SDL_GetTicks();
 }
 
+
+
 void initStage(void)
 {
+    
+    
     app.delegate.logic = logic;
     app.delegate.draw = draw;
 
@@ -307,16 +374,12 @@ void initStage(void)
     //stage.boardTail = &stage.boardHead;
     //stage.heartTail = &stage.heartHead;
     initPlayer();
-   // initHeart();
 
     /*Khai báo tệp chứa hình kẻ thù*/
     enemyTexture = loadTexture("data\\images\\hmm.jpg");
 
     /*Khai báo tệp chứa ảnh nền*/
-    background = loadTexture("data\\images\\jhin01.jpg");
-
-    /*Khai báo tệp chứa ảnh trái tim*/
-    heartTexture = loadTexture("data\\images\\tim.jpg");
+    background = loadTexture("data\\images\\00.jpg");
     
     if (!enemyTexture)
      {
@@ -324,5 +387,4 @@ void initStage(void)
         exit(1);
     }
 
-    //enemySpawnTimer = 0;
 }

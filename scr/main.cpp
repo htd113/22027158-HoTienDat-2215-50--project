@@ -2,7 +2,6 @@
 //extern dinh nghia app nhieu lan, tranh xung dot
 
 App app;
-//Entity *player;
 
 int main(int argc, char *argv[])
 {
@@ -13,21 +12,21 @@ int main(int argc, char *argv[])
 
     initSDL();
 
-    //atexit(cleanup);
+    initGameSystem();
 
-    initStage();
+    initDemo();
 
-    initSounds();
+    initTitle();
+    
+    long lastFrameTime = SDL_GetTicks();
 
-    then = SDL_GetTicks();
-
-    remainder = 0;
+    //remainder = 0;
 
     while (1)
     {
         prepareScene();
 
-        doInput();
+        doInput();   
 
         app.delegate.logic();
 
@@ -35,8 +34,9 @@ int main(int argc, char *argv[])
 
         presentScene();
 
-        capFrameRate(&then, &remainder);
+        capFrameRate(&lastFrameTime);
     }
 
+    
     return 0;
 }

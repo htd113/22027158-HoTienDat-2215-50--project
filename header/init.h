@@ -5,11 +5,15 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "SDL2/SDL_mixer.h"
+#include "SDL2/SDL_ttf.h"
 #include "structs.h"
-#include"defs.h"
-
+#include "defs.h"
+#include "widgets.h"
+#include "demo.h"
 
 void initSDL(void);
-SDL_Texture* loadTexture(std::string filename) ;
 
+SDL_Texture* loadTexture(std::string filename);
+
+void initGameSystem(void);
 #endif

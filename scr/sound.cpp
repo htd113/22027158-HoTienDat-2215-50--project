@@ -1,9 +1,40 @@
-#include "init.h"
-/*
+#include "sound.h"
+
+/*Danh sách tên tệp nhạc*/
+std::vector<std::string> musicList = { "data\\audio\\music01.mp3",
+                                        "data\\audio\\music02.mp3",
+                                        "data\\audio\\music00.mp3"
+                                        }; 
+int currentTrackIndex = 0; // Chỉ số của bài hát hiện tại
+Mix_Music* backgroundMusic = NULL; // Biến toàn cục để theo dõi nhạc nền hiện tại
+Mix_Music* LoadMusic(std::string filename) 
+{
+    // Get the base path
+    std::string base_path = std::string(SDL_GetBasePath());
+
+    Mix_Music* music = Mix_LoadMUS( (base_path + filename).c_str());
+
+    return music;
+}
+
+/*Chuyển nhạc nền*/
+static void musicFinishedCallback(void) 
+{
+    // Xử lý sự kiện khi nhạc nền kết thúc
+    // Chuyển sang bài hát khác ở đây (tải và phát bài hát tiếp theo)
+    // Ví dụ:
+    currentTrackIndex = (currentTrackIndex + 1) % musicList.size();
+    Mix_FreeMusic(backgroundMusic);
+    backgroundMusic = LoadMusic(musicList[currentTrackIndex]);
+    Mix_PlayMusic(backgroundMusic, 1);
+}
+
 Mix_Chunk* sounds[MAX_SND_CHANNELS];
 Mix_Music* music = NULL;
 
-Mix_Chunk* loadMusic(std::string filename) {
+/*Tìm nhạc theo đường dẫn*/
+Mix_Chunk* loadMusic(std::string filename) 
+{
     // Get the base path
     std::string base_path = std::string(SDL_GetBasePath());
 
@@ -12,24 +43,26 @@ Mix_Chunk* loadMusic(std::string filename) {
     return music;
 }
 
-void loadMusic(const std::string& filename) 
+/*Tải nhạc nền*/
+void load_music_background(void) 
 {
-    if (music != NULL) 
+     
+    backgroundMusic = LoadMusic(musicList[currentTrackIndex]);
+    if (backgroundMusic == NULL)
     {
-        Mix_HaltMusic();
-        Mix_FreeMusic(music);
-        music = NULL;
-    }
-    std::string base_path = std::string(SDL_GetBasePath());
-    music = Mix_LoadMUS((base_path + filename).c_str());
-    if (music == NULL) 
-    {
-        printf("Error loading music: %s\n", Mix_GetError());
-        // Xử lý lỗi tại đây (ví dụ: thoát khỏi chương trình)
+        printf("Lỗi khi tải nhạc nền: %s\n", Mix_GetError());
+        // Xử lý lỗi tại đây 
         exit(0);
     }
+
+    // Phát nhạc nền
+    Mix_PlayMusic(backgroundMusic, 1);
+
+    // Đăng ký callback khi nhạc nền kết thúc
+    Mix_HookMusicFinished(musicFinishedCallback);
 }
 
+/*Tải hiệu ứng âm thanh*/
 void loadSounds(void) 
 {
     sounds[SND_PLAYER_DIE] = loadMusic("data\\audio\\player_die.mp3");
@@ -44,56 +77,18 @@ void initSounds(void)
     music = NULL;
 
     loadSounds();
+
+    load_music_background();
 }
 
+/*Phát nhạc nền*/
 void playMusic(int loop) 
 {
     Mix_PlayMusic(music, (loop) ? -1 : 0);
 }
 
+/*Phát âm thanh theo kênh*/
 void playSound(int id, int channel) 
 {
     Mix_PlayChannel(channel, sounds[id], 0);
-}
-*/
-
-Mix_Music* loadMusic(std::string filename) {
-    // Get the base path
-    std::string base_path = std::string(SDL_GetBasePath());
-
-    Mix_Music* music = Mix_LoadMUS( (base_path + filename).c_str());
-
-    return music;
-}
-
-void initSounds(void)
-{
-    // Khởi tạo SDL và SDL_mixer
-    if (SDL_Init(SDL_INIT_AUDIO) < 0)
-    {
-        printf("Lỗi khi khởi tạo SDL: %s\n", SDL_GetError());
-        // Xử lý lỗi tại đây 
-        exit(0);
-    }
-
-    // Khởi tạo âm thanh
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
-    {
-        printf("Lỗi khi khởi tạo âm thanh: %s\n", Mix_GetError());
-        // Xử lý lỗi tại đây 
-        exit(0);
-    }
-
-    // Tải nhạc nền
-
-    Mix_Music* backgroundMusic = loadMusic("data\\audio\\music.ogg");
-    if (backgroundMusic == NULL)
-    {
-        printf("Lỗi khi tải nhạc nền: %s\n", Mix_GetError());
-        // Xử lý lỗi tại đây 
-        exit(0);
-    }
-
-    // Phát nhạc nền (lặp lại)
-    Mix_PlayMusic(backgroundMusic, -1);
 }
