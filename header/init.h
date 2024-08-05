@@ -8,12 +8,9 @@
 #include "SDL2/SDL_ttf.h"
 #include "structs.h"
 #include "defs.h"
-#include "widgets.h"
-#include "demo.h"
 
 void initSDL(void);
 
 SDL_Texture* loadTexture(std::string filename);
 
-void initGameSystem(void);
 #endif

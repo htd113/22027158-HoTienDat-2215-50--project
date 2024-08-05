@@ -16,7 +16,7 @@ void initHighscoreTable(void)
 
 }
 
-bool isPaused = false; // Khai báo biến kiểm tra trạng thái tạm dừng
+//bool isPaused = false; // Khai báo biến kiểm tra trạng thái tạm dừng
 static void logic(void)
 {
     //doBackground();
@@ -26,9 +26,18 @@ static void logic(void)
     if (app.keyboard[SDL_SCANCODE_RETURN])
     {
         initStage();
+        //initSounds();
     }
 
+    if (app.keyboard[SDL_SCANCODE_ESCAPE])
+    {
+        exit(0);
+    }
     
+    if (app.keyboard[SDL_SCANCODE_SPACE])
+    {
+        initMenu();
+    }
 
 }
 

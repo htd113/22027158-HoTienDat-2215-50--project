@@ -5,16 +5,18 @@ App app;
 
 int main(int argc, char *argv[])
 {
-    long then;
-    float remainder;
+    //long then;
+    //float remainder;
 
     memset(&app, 0, sizeof(App));
 
     initSDL();
 
-    initGameSystem();
+    //load_music_title("data/audio/music01.mp3");
 
-    initDemo();
+    initFonts();
+
+    //initDemo();
 
     initTitle();
     

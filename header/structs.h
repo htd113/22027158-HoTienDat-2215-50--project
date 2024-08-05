@@ -6,18 +6,27 @@
 #include "defs.h"
 
 struct Widget {
-    char name[MAX_NAME_LENGTH];
-    int x;
-    int y;
-    char label[MAX_NAME_LENGTH];
-    Widget *prev;
+    float x;
+    float y;
+    int w;
+    int h;
+    float dx;
+    float dy;
+    int reload;
+    SDL_Texture *texture;
     Widget *next;
+    
 };
+
+typedef struct{
+    Widget widgetHead, *widgetTail;
+} Menu;
 
 /*typedef struct {
     void (*logic)(void);
     void (*draw)(void);
 } Delegate;*/
+
 
 typedef struct {
     struct {
@@ -27,11 +36,6 @@ typedef struct {
     SDL_Renderer *renderer;
     SDL_Window *window;
     int keyboard[MAX_KEYBOARD_KEYS];
-    double deltaTime;
-    Widget *activeWidget;
-    struct {
-        int fps;
-    } dev;
 } App;
 
 struct Entity {

@@ -64,13 +64,6 @@ SDL_Texture* loadTexture(std::string filename) {
     return texture;
 }
 
-void initGameSystem(void)
-{
-    initFonts();
-
-    initWidgets();
-}
-
 /*static SDL_Texture *getTexture(char *name)
 {
     Texture *t;

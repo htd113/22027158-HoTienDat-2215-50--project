@@ -5,7 +5,8 @@ SDL_Texture *sdl2Texture, *shooterTexture;
 static void drawLogo(void)
 {
 
-    drawText(SCREEN_WIDTH/2-100, SCREEN_HEIGHT/2-50, 200, 50, "RAPID ROLL");
+    drawText(SCREEN_WIDTH/2-150, SCREEN_HEIGHT/2-100, 200, 50, "RAPID ROLL");
+    drawText(SCREEN_WIDTH/2-175, SCREEN_HEIGHT/2+200, 300, 20, "PRESS [ENTER] TO MENU!!");
 
 }
 
@@ -15,18 +16,7 @@ static void drawBackground(void)
     SDL_Texture *background = loadTexture("data\\images\\cxok.jpg");
     SDL_Rect dest = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
     SDL_RenderCopy(app.renderer, background, NULL, &dest);
-    /*SDL_Rect dest;
-    int x;
-
-    for (x = backgroundX ; x < SCREEN_WIDTH ; x += SCREEN_WIDTH)
-    {
-        dest.x = x;
-        dest.y = 0;
-        dest.w = SCREEN_WIDTH;
-        dest.h = SCREEN_HEIGHT;
-
-        SDL_RenderCopy(app.renderer, background, NULL, &dest);
-    }*/
+    SDL_DestroyTexture(background);
 }
 
 static void draw(void)
@@ -41,17 +31,9 @@ static void draw(void)
 
 static void logic(void)
 {
-    //doBackground();
-
-    //doStarfield();
-    //SDL_Delay(3000);
     if(app.keyboard[SDL_SCANCODE_RETURN])
     {
-        initHighscores();
-
-        initStage();
-
-        initSounds();
+        initMenu();
     }
 }
 

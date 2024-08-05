@@ -16,8 +16,7 @@
 #include "text.h"
 #include "highscores.h"
 #include "title.h"
-#include "widgets.h"
-#include "demo.h"
+#include "menu.h"
 
 void initStage(void);
 void capFrameRate(long *then);

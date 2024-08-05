@@ -12,7 +12,36 @@ void initFonts(void)
     }
 }
 
-SDL_Color text_color = { 255, 255, 255, 255 }; 
+SDL_Color text_color = { 255, 255, 255, 255 };
+SDL_Color color = { 255, 0, 0, 255 }; // Red color (R=255, G=0, B=0, A=255)
+
+
+SDL_Texture *getTexture(const char *text)
+{
+    SDL_Surface *surface;
+
+    surface = TTF_RenderText_Solid(font, text, color);
+
+    SDL_Texture *texture;
+
+    texture = SDL_CreateTextureFromSurface(app.renderer, surface);
+    SDL_FreeSurface(surface); // Free the surface after creating the texture
+    //SDL_DestroyTexture()
+    return texture;
+}
+
+void draw_text(int x, int y, int w, int h, const char *format)
+{
+
+    Texture = getTexture(format);
+
+    SDL_Rect dest = {x, y, w, h};
+
+    SDL_RenderCopy(app.renderer, Texture, NULL, &dest);
+
+    SDL_DestroyTexture(Texture);        // Free up texture
+}
+
 
 SDL_Texture *getTextTexture(const char *text)
 {

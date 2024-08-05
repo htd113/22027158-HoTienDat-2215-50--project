@@ -14,7 +14,9 @@ Mix_Music* LoadMusic(std::string filename);
 static void musicFinishedCallback(void);
 
 /*Tìm nhạc theo đường dẫn*/
-Mix_Chunk* loadMusic(std::string filename) ;
+Mix_Chunk* loadMusic(std::string filename);
+
+void load_music_title(const char *file);
 
 /*Tải nhạc nền*/
 void load_music_background(void);

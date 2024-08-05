@@ -5,6 +5,10 @@
 
 void initFonts(void);
 
+SDL_Texture *getTexture(const char *text);
+
+void draw_text(int x, int y, int w, int h, const char *format);
+
 SDL_Texture *getTextTexture(const char *text);
 
 //SDL_Texture *toTexture(SDL_Surface *surface, int destroySurface);

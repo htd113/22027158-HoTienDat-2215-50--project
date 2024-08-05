@@ -43,6 +43,12 @@ Mix_Chunk* loadMusic(std::string filename)
     return music;
 }
 
+void load_music_title(const char *file)
+{
+    backgroundMusic = LoadMusic(file);
+    Mix_PlayMusic(backgroundMusic, -1);
+}
+
 /*Tải nhạc nền*/
 void load_music_background(void) 
 {
