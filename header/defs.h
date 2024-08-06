@@ -5,12 +5,12 @@
 #define PLAYER_WIDTH 30
 #define PLAYER_HEIGHT 30
 
-#define BOARD_SPEED -2
+#define BOARD_SPEED -4
 #define BOARD_WIDTH 100
 #define BOARD_HEIGHT 5
 
 #define GRAVITY 0.5 
-#define MAX_FALL_SPEED 3
+#define MAX_FALL_SPEED 4
 #define MAX_KEYBOARD_KEYS 350
 
 #define MAX_SND_CHANNELS 5
@@ -28,8 +28,7 @@
 #define FONT_SIZE 256
 
 #define NUM_HIGHSCORES 8
-#define STRNCPY(dest, src, n) strncpy(dest, src, n); dest[n - 1] = '\0'
 #define MAX_NAME_LENGTH 100
-#define FPS 60
+#define FPS 90
 
 #define POINTER_SPEED 10

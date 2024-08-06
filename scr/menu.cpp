@@ -120,7 +120,7 @@ static void logic(void)
     //SOUND
     else if(pointer->y >=275 && pointer->y <325)
     {
-        if (app.keyboard[SDL_SCANCODE_RETURN])
+        if (app.keyboard[SDL_SCANCODE_SPACE])
         {
             toggleSound();
         }

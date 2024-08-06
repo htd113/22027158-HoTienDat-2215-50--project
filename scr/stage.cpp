@@ -63,6 +63,7 @@ static void spawnEnemies(void)
         enemy->y = SCREEN_HEIGHT;
 
         enemy->texture = enemyTexture;
+        
         enemy->dy = BOARD_SPEED; // Tốc độ di chuyển cố định của kẻ thù gốc
 
         // Đặt thời gian sinh kẻ thù mới dựa trên khoảng cách cố định và tốc độ di chuyển
@@ -111,6 +112,7 @@ static void doPlayer(void)
             playSound(SND_PLAYER_MOVE, CH_PLAYER);
         }
 
+        
         /*Đặt trọng lực*/
         player->gravitySpeed += GRAVITY;
         if (player->gravitySpeed > MAX_FALL_SPEED)
@@ -130,7 +132,7 @@ static void doPlayer(void)
         /* Kiểm tra xem người chơi có ra khỏi màn hình không */
         if (IsPlayer(player))
         {
-            highscore = std::max(highscore, stage.score);
+            //highscore = std::max(highscore, stage.score);
 
 
             // Ghi điểm cao vào tệp
@@ -227,7 +229,6 @@ static void resetStage(void)
 
     memset(&stage, 0, sizeof(Stage));
     stage.enemyTail = &stage.enemyHead;
-    //stage.bulletTail = &stage.bulletHead;
 
     initPlayer();
 
@@ -317,6 +318,7 @@ static void drawBackground(void)
         SDL_RenderCopy(app.renderer, background, NULL, &dest);
     }*/
 }
+
 /*Vẽ chữ lên màn hình*/
 static void drawHud(void)
 {

@@ -43,7 +43,4 @@ void initTitle(void)
     app.delegate.draw = draw;
 
     memset(app.keyboard, 0, sizeof(int) * MAX_KEYBOARD_KEYS);
-
-
-
 }

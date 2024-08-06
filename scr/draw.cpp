@@ -5,9 +5,9 @@ extern App app;
 void prepareScene(void)
 {
     SDL_SetRenderDrawColor(app.renderer, 255, 255, 255, 0);
-   
+
     SDL_RenderClear(app.renderer);
-    
+
 
 }
 
@@ -82,7 +82,7 @@ void blit_board(SDL_Texture* texture, int x, int y)
     SDL_RenderCopy(app.renderer, texture, NULL, &dest);
 }
 
-void blitRect(SDL_Texture *texture, SDL_Rect *src, int x, int y)
+void blitRect(SDL_Texture* texture, SDL_Rect* src, int x, int y)
 {
     SDL_Rect dest;
 

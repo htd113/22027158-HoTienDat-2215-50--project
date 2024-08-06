@@ -5,24 +5,15 @@ App app;
 
 int main(int argc, char *argv[])
 {
-    //long then;
-    //float remainder;
-
     memset(&app, 0, sizeof(App));
 
     initSDL();
 
-    //load_music_title("data/audio/music01.mp3");
-
     initFonts();
-
-    //initDemo();
 
     initTitle();
     
     long lastFrameTime = SDL_GetTicks();
-
-    //remainder = 0;
 
     while (1)
     {
