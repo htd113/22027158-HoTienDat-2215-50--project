@@ -1,6 +1,8 @@
 Hướng dẫn chơi Rapid Roll(remake)
 -Mục tiêu của trò chơi:
    + Mục tiêu chính của trờ chơi này là điều khiển nhân vật càng nhiều càng tốt mà không bị rơi ra khỏi màn hình.
+
+
 -Cách chơi:
  1.Điều khiển:
    + Phím mũi tên trái/phải: Di chuyển nhân vật sang trái hoặc phải.
@@ -11,6 +13,7 @@ Hướng dẫn chơi Rapid Roll(remake)
  3.Điểm số:
    + Điểm số của bạn sẽ tăng lên khi bạn di chuyển qua các thanh ngang.
    + Cố gắng di chuyển càng nhiều càng tốt để đạt điểm số cao.
+
 
 -Mẹo chơi:
   + Quan sát kỹ: Luôn nhìn trước để dự đoán vị trí của các nền tảng tiếp theo.
